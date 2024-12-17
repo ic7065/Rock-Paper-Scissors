@@ -27,7 +27,7 @@ import java.util.*;
  */
 public class PlayerExample implements Player
 {
-    private static String name = "Probability";
+    private static String name = "Response Counter";
     /**
      * An example of a method - replace this comment with your own
      * You must create some kind of logic of what to play against your opponent...start thinking!
@@ -40,31 +40,22 @@ public class PlayerExample implements Player
      */
     public String move(String [] myMoves, String [] opponentMoves, int myScore, int opponentScore)
     {
-        int r,p,s;
-        r=p=s=0;
-        for (String mv :opponentMoves){
-            if (mv=="r"){
-                r++;
-            }
-            if (mv=="p"){
-                p++;
-            }
-            if (mv=="s"){
-                s++;
-            }
+        int len=0;
+        for (String s:myMoves) {
+            if (s==null) break;
+            len++;
         }
-        if (r>p&&r>s){
-            return "p";
+        if (len<2) return new String[] {"r","p","s"}[new Random().nextInt(3)];
+        String myLastMove=myMoves[len-1];
+
+        for (int i =len-2;i>=0;i--){
+            if (myMoves[i]!=myLastMove) continue;
+            if (opponentMoves[i + 1].equals("r")) return "p";
+            if (opponentMoves[i + 1].equals("p")) return "s";
+            if (opponentMoves[i + 1].equals("s")) return "r";            
         }
-        else if (p>r&&p>s){
-            return "s";
-        }
-        else if (s>r&&s>p){
-            return "r";
-        }
-        else{
-            return new String[] {"r","p","s"}[new Random().nextInt(3)];
-        }
+
+        return new String[] {"r","p","s"}[new Random().nextInt(3)];
     }
     /**
      * Returns the name of the player
